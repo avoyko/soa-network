@@ -1,0 +1,142 @@
+specification {
+  element actor
+  element system
+  element component
+  element service
+  element broker
+  element database
+}
+
+model {
+  user = actor 'User' {
+
+  }
+  user -> social_network.ui
+  social_network = system 'Social Network' {
+    ui = component "UI" {
+      description "Serves as a layer between a user and social network's backends"
+    }
+    ui -> network-api
+
+    network-api = service 'network-api' {
+      description 'Proxy service that works as an orchestrator for requests to different microservices with specific features'
+    }
+
+    network-api -> network-posts
+    network-api -> network-statistics
+    network-api -> network-users
+
+    network-posts = service 'network-posts' {
+      description 'Service for posts and comments'
+      api = component 'Service API'
+      db = database 'DB' {
+        description "Store posts and comments info"
+        style {
+          icon https://icons.terrastruct.com/dev%2Fpostgresql.svg
+          size small
+          textSize lg
+          shape storage
+        }
+      }
+      api -> db
+    }
+
+    network-statistics = service 'network-statistics' {
+      description "Service for storing users' activity across social network"
+      api = component 'Service API'
+      db = database 'DB' {
+        description "Store users' statistics"
+        style {
+          icon https://marketplace-assets.digitalocean.com/logos/clickhouse.svg
+          size small
+          textSize lg
+          shape storage
+        }
+      }
+      api -> db
+    }
+
+
+    network-users = service 'network-users' {
+      description "Service for registration/authentication users and storing their data"
+      api = component 'Service API'
+      db = database 'DB' {
+        description "Store users' profiles info"
+        style {
+          icon https://icons.terrastruct.com/dev%2Fpostgresql.svg
+          size small
+          textSize lg
+          shape storage
+        }
+      }
+      api -> db
+    }
+
+    event-broker = broker 'event-broker' {
+      description "Basic message queue to store users' events"
+    }
+
+    event-broker -> network-statistics
+    network-posts -> event-broker
+    network-users -> event-broker
+
+  }
+}
+
+
+views {
+  // with name
+  view index {
+    title 'Context'
+    include user
+    include
+      social_network with {
+        navigateTo container
+      }
+    style user {
+      color red
+      shape person
+    }
+  }
+  view container {
+    title 'Container Diagram'
+    description 'Level 2 of the C4 model'
+    style * {
+      color sky 
+    }
+    include *
+
+    style user {
+      color red
+      shape person
+    }
+    
+    style social_network.network-users.api {
+      color indigo
+    }
+
+    style social_network.network-users.db {
+      color gray
+      shape storage
+    }
+
+    style social_network.network-statistics.api {
+      color indigo
+    }
+
+    style social_network.network-statistics.db {
+      color gray
+    }
+
+    style social_network.network-posts.api {
+      color indigo
+    }
+    
+    style social_network.network-posts.db {
+      color gray
+    }
+  
+    include social_network.**
+  }
+}
+

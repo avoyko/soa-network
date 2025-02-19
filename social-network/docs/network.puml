@@ -1,0 +1,138 @@
+@startuml "network"
+
+
+package "network-users" {
+
+entity users {
+    +user_id: UUID
+    ---
+    username: TEXT
+    email: TEXT
+    phone_number: TEXT
+    password_hash: TEXT
+    created_at: TIMESTAMPZ
+}
+
+entity profiles {
+    +user_id: UUID
+    ---
+    username: TEXT
+    email: TEXT
+    phone_number: TEXT
+    bio: TEXT
+    birthday: TIMESTAMPZ
+    last_seen_at: TIMESTAMPZ
+    updated_at: TIMESTAMPZ
+}
+
+entity followers {
+    +follow_id: UUID
+    ---
+    follower_id: UUID
+    followee_id: UUID
+    followed_at: TIMESTAMPZ
+    is_close_follower: BOOLEAN
+}
+
+}
+
+package "network-posts" {
+
+entity posts {
+    +post_id: UUID
+    ---
+    user_id: UUID
+    content: TEXT
+    created_at: TIMESTAMPZ
+    has_media: BOOLEAN
+}
+
+entity views {
+    +view_id: int
+    ---
+    post_id: int
+    user_id: int
+    viewed_at: datetime
+}
+
+entity reactions {
+    +reaction_id: UUID
+    ---
+    post_id: UUID
+    user_id: UUID
+    type: TEXT
+    reacted_at: TIMESTAMPZ
+}
+
+entity comments {
+    * comment_id : UUID 
+    --
+    post_id : UUID 
+    user_id : UUID 
+    parent_comment_id: UUID
+    content : TEXT
+    created_at : TIMESTAMP
+    updated_at : TIMESTAMP
+}
+
+}
+
+package "network-statistics" {
+
+entity posts_statistics {
+    +post_id: UUID
+    ---
+    views_count: BIGINT
+    reactions_count: BIGINT
+    comments_count: BIGINT
+    updated_at: TIMESTAMPZ
+}
+
+entity users_statistics {
+    +user_id: UUID
+    ---
+    followers_count: BIGINT
+    close_followers_count: BIGINT
+    blocked_users_count: BIGINT
+    hours_spent: TIMESTAMPZ
+}
+
+entity daily_statistics {
+    +day_id: UUID
+    ---
+    users_created: BIGINT
+    users_left: BIGINT
+    posts_count: BIGINT
+    comments_count: TIMESTAMPZ
+    views_count: BIGINT
+    reactions_count: BIGINT
+    
+}
+
+}
+
+users ||--o{ posts : "creates"
+users ||--o{ views : "views"
+users ||--o{ reactions : "reacts to"
+users ||--o{ users_statistics : "sends"
+users ||--|| profiles : "has"
+users }o--o{ followers : "follows"
+users ||--o{ daily_statistics : "sends"
+
+posts ||--o{ views: "has"
+posts ||--o{ reactions : "has"
+posts ||--o{ comments : "has"
+
+views ||--|| posts_statistics : "sends"
+reactions ||--|| posts_statistics : "sends"
+comments ||--|| posts_statistics : "sends"
+
+views ||--|| daily_statistics : "sends"
+reactions ||--|| daily_statistics : "sends"
+comments ||--|| daily_statistics : "sends"
+
+followers ||--o{ users_statistics : "sends"
+
+
+
+@enduml
