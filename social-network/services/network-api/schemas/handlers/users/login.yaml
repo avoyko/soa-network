@@ -1,0 +1,25 @@
+components:
+  schemas:
+    UsersLoginRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+      required:
+      - username
+      - password
+      - email
+
+    UsersLoginResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        message:
+          type: string
+      required:
+      - message

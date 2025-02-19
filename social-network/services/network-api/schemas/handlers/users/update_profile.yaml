@@ -1,0 +1,30 @@
+components:
+  schemas:
+    UsersUpdateProfileRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        surname:
+          type: string
+        email:
+          type: string
+        birthdate:
+          type: string
+        phone:
+          type: string
+        bio:
+          type: string
+      required:
+      - name
+      - surname
+
+    UsersUpdateProfileResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        message:
+          type: string
+      required:
+      - message
