@@ -34,6 +34,15 @@ entity followers {
     is_close_follower: BOOLEAN
 }
 
+entity roles {
+    +role_id: UUID
+    ---
+    user_id: UUID
+    role_type: TEXT
+    created_at: TIMESTAMPZ
+    updated: TIMESTAMPZ
+}
+
 }
 
 package "network-posts" {
@@ -112,6 +121,7 @@ entity daily_statistics {
 }
 
 users ||--o{ posts : "creates"
+users ||--o{ roles : "has"
 users ||--o{ views : "views"
 users ||--o{ reactions : "reacts to"
 users ||--o{ users_statistics : "sends"
