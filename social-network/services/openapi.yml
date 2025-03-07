@@ -1,0 +1,172 @@
+openapi: 3.0.0
+info:
+  title: User Authentication API
+  description: API для регистрации и аутентификации пользователей
+  version: 1.0.0
+servers:
+- url: http://localhost:8000
+  description: Локальный сервер
+paths:
+  /auth/register:
+    post:
+      summary: Регистрация нового пользователя
+      tags:
+      - auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserCreate"
+      responses:
+        '201':
+          description: Пользователь успешно зарегистрирован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+        '400':
+          description: Ошибка валидации или пользователь уже существует
+  /auth/login:
+    post:
+      summary: Аутентификация пользователя
+      tags:
+      - auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserLogin"
+      responses:
+        '200':
+          description: Аутентификация успешна
+        '401':
+          description: Неверные учетные данные
+  /users/profile/{login}:
+    get:
+      summary: Получение данных профиля пользователя
+      tags:
+      - users
+      parameters:
+      - in: path
+        name: login
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Данные профиля
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+        '404':
+          description: Пользователь не найден
+    put:
+      summary: Обновление данных профиля пользователя
+      tags:
+      - users
+      parameters:
+      - in: path
+        name: login
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserUpdate"
+      responses:
+        '200':
+          description: Данные профиля обновлены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+        '404':
+          description: Пользователь не найден
+components:
+  schemas:
+    UserCreate:
+      type: object
+      required:
+      - login
+      - password
+      - email
+      properties:
+        login:
+          type: string
+          description: Логин пользователя
+        password:
+          type: string
+          description: Пароль пользователя
+        email:
+          type: string
+          format: email
+          description: Электронная почта пользователя
+    UserLogin:
+      type: object
+      required:
+      - login
+      - password
+      properties:
+        login:
+          type: string
+          description: Логин пользователя
+        password:
+          type: string
+          description: Пароль пользователя
+    UserUpdate:
+      type: object
+      properties:
+        first_name:
+          type: string
+          description: Имя пользователя
+        last_name:
+          type: string
+          description: Фамилия пользователя
+        birth_date:
+          type: string
+          format: date
+          description: Дата рождения
+        email:
+          type: string
+          format: email
+          description: Электронная почта
+        phone:
+          type: string
+          description: Номер телефона
+    UserResponse:
+      type: object
+      properties:
+        login:
+          type: string
+          description: Логин пользователя
+        email:
+          type: string
+          format: email
+          description: Электронная почта
+        first_name:
+          type: string
+          description: Имя пользователя
+        last_name:
+          type: string
+          description: Фамилия пользователя
+        birth_date:
+          type: string
+          format: date
+          description: Дата рождения
+        phone:
+          type: string
+          description: Номер телефона
+        created_at:
+          type: string
+          format: date-time
+          description: Дата создания профиля
+        updated_at:
+          type: string
+          format: date-time
+          description: Дата последнего обновления профиля
