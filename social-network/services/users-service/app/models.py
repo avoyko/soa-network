@@ -7,7 +7,7 @@ class User(Base):
 
     login = Column(String, primary_key=True, index=True)
     password_hash = Column(String, nullable=False)
-    email = Column(String, unique=True, index=True, nullable=False)
+    email = Column(String, unique=False, index=True, nullable=False)
     first_name = Column(String, nullable=True)
     last_name = Column(String, nullable=True)
     birth_date = Column(Date, nullable=True)
