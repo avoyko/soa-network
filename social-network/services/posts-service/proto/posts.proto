@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+package posts;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+service PostsService {
+  // Create a new post
+  rpc CreatePost(CreatePostRequest) returns (PostResponse);
+  
+  // Get a post by ID
+  rpc GetPost(GetPostRequest) returns (PostResponse);
+  
+  // Update an existing post
+  rpc UpdatePost(UpdatePostRequest) returns (PostResponse);
+  
+  // Delete a post
+  rpc DeletePost(DeletePostRequest) returns (google.protobuf.Empty);
+  
+  // List posts with pagination
+  rpc ListPosts(ListPostsRequest) returns (ListPostsResponse);
+}
+
+message CreatePostRequest {
+  string title = 1;
+  string description = 2;
+  string creator_id = 3;
+  bool is_private = 4;
+  repeated string tags = 5;
+}
+
+message GetPostRequest {
+  string id = 1;
+  string requester_id = 2; // ID пользователя, запрашивающего пост (для проверки приватности)
+}
+
+message UpdatePostRequest {
+  string id = 1;
+  string title = 2;
+  string description = 3;
+  bool is_private = 4;
+  repeated string tags = 5;
+  string updater_id = 6; // ID пользователя, обновляющего пост (для авторизации)
+}
+
+message DeletePostRequest {
+  string id = 1;
+  string deleter_id = 2; // ID пользователя, удаляющего пост (для авторизации)
+}
+
+message PostResponse {
+  string id = 1;
+  string title = 2;
+  string description = 3;
+  string creator_id = 4;
+  google.protobuf.Timestamp created_at = 5;
+  google.protobuf.Timestamp updated_at = 6;
+  bool is_private = 7;
+  repeated string tags = 8;
+}
+
+message ListPostsRequest {
+  int32 page = 1;
+  int32 page_size = 2;
+  string viewer_id = 3; // ID пользователя для фильтрации приватных постов
+}
+
+message ListPostsResponse {
+  repeated PostResponse posts = 1;
+  int32 total_count = 2;
+  int32 page = 3;
+  int32 page_size = 4;
+}

@@ -7,19 +7,39 @@ services:
       - "8000:8000"
     depends_on:
       - users-service
+      - posts-service
     networks:
       - app-network
 
   users-service:
     build: ./users-service
     depends_on:
-      - db
+      - users_db
     environment:
-      - DATABASE_URL=postgresql://postgres:postgres@db:5432/users
+      - DATABASE_URL=postgresql://postgres:postgres@users_db:5432/users
+    networks:
+      - app-network
+  
+  posts_service:
+    build: .
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@posts_db:5432/posts
+      - GRPC_PORT=50051
+    depends_on:
+      - posts_db
     networks:
       - app-network
 
-  db:
+  posts_db:
+    image: postgres:14-alpine
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=posts
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  users_db:
     image: postgres:13
     volumes:
       - postgres_data:/var/lib/postgresql/data/
