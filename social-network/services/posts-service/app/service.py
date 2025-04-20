@@ -1,3 +1,4 @@
+from xmlrpc.client import boolean
 from sqlalchemy.orm import Session
 from datetime import datetime
 from google.protobuf.timestamp_pb2 import Timestamp
@@ -5,6 +6,8 @@ from app.models import Post, Tag
 from app.exceptions import NotFoundError, PermissionDeniedError, ValidationError
 from typing import List, Optional
 import logging
+from proto import posts_pb2, posts_pb2_grpc
+from proto.posts_pb2 import PostResponse
 
 logger = logging.getLogger(__name__)
 
@@ -14,15 +17,13 @@ class PostsService:
         self.db = db
 
     def _post_to_proto(self, post: Post):
-        from posts_pb2 import PostResponse
-
         created_at = Timestamp()
         created_at.FromDatetime(post.created_at)
 
         updated_at = Timestamp()
         updated_at.FromDatetime(post.updated_at)
 
-        return PostResponse(
+        return posts_pb2.PostResponse(
             id=post.id,
             title=post.title,
             description=post.description,
@@ -142,6 +143,7 @@ class PostsService:
         query = query.filter(
             (Post.is_private == False) | (Post.creator_id == viewer_id)
         )
+    
 
         total_count = query.count()
 

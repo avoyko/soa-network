@@ -7,7 +7,7 @@ servers:
 - url: http://localhost:8000
   description: Локальный сервер
 paths:
-  /auth/register:
+  /users/register:
     post:
       summary: Регистрация нового пользователя
       tags:
@@ -27,7 +27,7 @@ paths:
                 $ref: "#/components/schemas/UserResponse"
         '400':
           description: Ошибка валидации или пользователь уже существует
-  /auth/login:
+  /users/login:
     post:
       summary: Аутентификация пользователя
       tags:

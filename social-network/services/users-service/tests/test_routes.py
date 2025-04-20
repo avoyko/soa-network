@@ -12,7 +12,7 @@ async def test_register_user(users_client):
         "email": f"route_test_{timestamp}@example.com"
     }
     
-    response = await users_client.post("/auth/register", json=test_user)
+    response = await users_client.post("/users/register", json=test_user)
     
     assert response.status_code == 201
     data = response.json()
@@ -32,7 +32,7 @@ async def test_login(users_client):
         "email": f"route_test_{timestamp}@example.com"
     }
     
-    response = await users_client.post("/auth/register", json=test_user)
+    response = await users_client.post("/users/register", json=test_user)
     data = response.json()
     # Входим в систему
     login_data = {
@@ -40,7 +40,7 @@ async def test_login(users_client):
         "password": test_user["password"]
     }
     
-    response = await users_client.post("/auth/login", json=login_data)
+    response = await users_client.post("/users/login", json=login_data)
     
     assert response.status_code == 200
 
@@ -55,14 +55,14 @@ async def test_login_wrong_password(users_client):
         "email": f"route_test_{timestamp}@example.com"
     }
     
-    response = await users_client.post("/auth/register", json=test_user)
+    response = await users_client.post("/users/register", json=test_user)
     # Пытаемся войти с неверным паролем
     login_data = {
         "login": test_user["login"],
         "password": "wrong_password"
     }
     
-    response = await users_client.post("/auth/login", json=login_data)
+    response = await users_client.post("/users/login", json=login_data)
     
     assert response.status_code == 401
     data = response.json()
@@ -79,7 +79,7 @@ async def test_get_profile(users_client):
         "email": f"route_test_{timestamp}@example.com"
     }
     
-    response = await users_client.post("/auth/register", json=test_user)
+    response = await users_client.post("/users/register", json=test_user)
     
     # Получаем профиль
     response = await users_client.get(f"/users/profile/{test_user['login']}")
@@ -100,7 +100,7 @@ async def test_update_profile(users_client):
         "email": f"route_test_{timestamp}@example.com"
     }
     
-    response = await users_client.post("/auth/register", json=test_user)
+    response = await users_client.post("/users/register", json=test_user)
     
     # Обновляем профиль
     update_data = {

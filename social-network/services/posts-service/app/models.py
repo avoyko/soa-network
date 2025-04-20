@@ -4,8 +4,8 @@ from sqlalchemy import Column, String, Boolean, DateTime, Integer, Table, Foreig
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 from uuid import uuid4
+from .database import Base
 
-Base = declarative_base()
 
 post_tags_association = Table(
     "post_tags",
@@ -24,7 +24,7 @@ class Post(Base):
     creator_id = Column(String, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    is_private = Column(Boolean, default=False)
+    is_private = Column(Boolean, default=False, nullable=True)
 
     tags = relationship("Tag", secondary=post_tags_association, backref="posts")
 

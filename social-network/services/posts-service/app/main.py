@@ -10,8 +10,8 @@ from app.models import Base
 from app.service import PostsService
 from app.exceptions import PostServiceError
 
-import posts_pb2
-import posts_pb2_grpc
+from proto import posts_pb2, posts_pb2_grpc
+import google.protobuf.empty_pb2  # Empty
 
 logging.basicConfig(
     level=logging.INFO,
@@ -84,6 +84,7 @@ class PostsServiceServicer(posts_pb2_grpc.PostsServiceServicer):
         db = self._get_db()
         try:
             service = PostsService(db)
+            is_private = request.is_private
             post = self._handle_exceptions(
                 context,
                 service.update_post,
@@ -91,9 +92,7 @@ class PostsServiceServicer(posts_pb2_grpc.PostsServiceServicer):
                 updater_id=request.updater_id,
                 title=request.title if request.title else None,
                 description=request.description if request.description else None,
-                is_private=(
-                    request.is_private if request.HasField("is_private") else None
-                ),
+                is_private=is_private,
                 tags=list(request.tags) if request.tags else None,
             )
 
@@ -115,8 +114,8 @@ class PostsServiceServicer(posts_pb2_grpc.PostsServiceServicer):
             )
 
             if success is not None:
-                return posts_pb2.google_dot_protobuf_dot_empty__pb2.Empty()
-            return posts_pb2.google_dot_protobuf_dot_empty__pb2.Empty()
+                return posts_pb2_grpc.google_dot_protobuf_dot_empty__pb2.Empty()
+            return posts_pb2_grpc.google_dot_protobuf_dot_empty__pb2.Empty()
         finally:
             db.close()
 

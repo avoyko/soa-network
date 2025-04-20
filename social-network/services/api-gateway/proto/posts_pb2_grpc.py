@@ -3,8 +3,7 @@
 import grpc
 import warnings
 
-from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
-import posts_pb2 as posts__pb2
+from proto import posts_pb2 as posts_dot_proto_dot_posts__pb2
 
 GRPC_GENERATED_VERSION = '1.71.0'
 GRPC_VERSION = grpc.__version__
@@ -19,14 +18,14 @@ except ImportError:
 if _version_not_supported:
     raise RuntimeError(
         f'The grpc package installed is at version {GRPC_VERSION},'
-        + f' but the generated code in posts_pb2_grpc.py depends on'
+        + f' but the generated code in posts/proto/posts_pb2_grpc.py depends on'
         + f' grpcio>={GRPC_GENERATED_VERSION}.'
         + f' Please upgrade your grpc module to grpcio>={GRPC_GENERATED_VERSION}'
         + f' or downgrade your generated code using grpcio-tools<={GRPC_VERSION}.'
     )
 
 
-class PostsServiceStub(object):
+class PostServiceStub(object):
     """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
@@ -36,107 +35,102 @@ class PostsServiceStub(object):
             channel: A grpc.Channel.
         """
         self.CreatePost = channel.unary_unary(
-                '/posts.PostsService/CreatePost',
-                request_serializer=posts__pb2.CreatePostRequest.SerializeToString,
-                response_deserializer=posts__pb2.PostResponse.FromString,
+                '/post.PostService/CreatePost',
+                request_serializer=posts_dot_proto_dot_posts__pb2.CreatePostRequest.SerializeToString,
+                response_deserializer=posts_dot_proto_dot_posts__pb2.PostResponse.FromString,
                 _registered_method=True)
         self.GetPost = channel.unary_unary(
-                '/posts.PostsService/GetPost',
-                request_serializer=posts__pb2.GetPostRequest.SerializeToString,
-                response_deserializer=posts__pb2.PostResponse.FromString,
+                '/post.PostService/GetPost',
+                request_serializer=posts_dot_proto_dot_posts__pb2.GetPostRequest.SerializeToString,
+                response_deserializer=posts_dot_proto_dot_posts__pb2.PostResponse.FromString,
                 _registered_method=True)
         self.UpdatePost = channel.unary_unary(
-                '/posts.PostsService/UpdatePost',
-                request_serializer=posts__pb2.UpdatePostRequest.SerializeToString,
-                response_deserializer=posts__pb2.PostResponse.FromString,
+                '/post.PostService/UpdatePost',
+                request_serializer=posts_dot_proto_dot_posts__pb2.UpdatePostRequest.SerializeToString,
+                response_deserializer=posts_dot_proto_dot_posts__pb2.PostResponse.FromString,
                 _registered_method=True)
         self.DeletePost = channel.unary_unary(
-                '/posts.PostsService/DeletePost',
-                request_serializer=posts__pb2.DeletePostRequest.SerializeToString,
-                response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+                '/post.PostService/DeletePost',
+                request_serializer=posts_dot_proto_dot_posts__pb2.DeletePostRequest.SerializeToString,
+                response_deserializer=posts_dot_proto_dot_posts__pb2.DeletePostResponse.FromString,
                 _registered_method=True)
         self.ListPosts = channel.unary_unary(
-                '/posts.PostsService/ListPosts',
-                request_serializer=posts__pb2.ListPostsRequest.SerializeToString,
-                response_deserializer=posts__pb2.ListPostsResponse.FromString,
+                '/post.PostService/ListPosts',
+                request_serializer=posts_dot_proto_dot_posts__pb2.ListPostsRequest.SerializeToString,
+                response_deserializer=posts_dot_proto_dot_posts__pb2.ListPostsResponse.FromString,
                 _registered_method=True)
 
 
-class PostsServiceServicer(object):
+class PostServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
     def CreatePost(self, request, context):
-        """Create a new post
-        """
+        """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def GetPost(self, request, context):
-        """Get a post by ID
-        """
+        """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def UpdatePost(self, request, context):
-        """Update an existing post
-        """
+        """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def DeletePost(self, request, context):
-        """Delete a post
-        """
+        """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def ListPosts(self, request, context):
-        """List posts with pagination
-        """
+        """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
 
-def add_PostsServiceServicer_to_server(servicer, server):
+def add_PostServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'CreatePost': grpc.unary_unary_rpc_method_handler(
                     servicer.CreatePost,
-                    request_deserializer=posts__pb2.CreatePostRequest.FromString,
-                    response_serializer=posts__pb2.PostResponse.SerializeToString,
+                    request_deserializer=posts_dot_proto_dot_posts__pb2.CreatePostRequest.FromString,
+                    response_serializer=posts_dot_proto_dot_posts__pb2.PostResponse.SerializeToString,
             ),
             'GetPost': grpc.unary_unary_rpc_method_handler(
                     servicer.GetPost,
-                    request_deserializer=posts__pb2.GetPostRequest.FromString,
-                    response_serializer=posts__pb2.PostResponse.SerializeToString,
+                    request_deserializer=posts_dot_proto_dot_posts__pb2.GetPostRequest.FromString,
+                    response_serializer=posts_dot_proto_dot_posts__pb2.PostResponse.SerializeToString,
             ),
             'UpdatePost': grpc.unary_unary_rpc_method_handler(
                     servicer.UpdatePost,
-                    request_deserializer=posts__pb2.UpdatePostRequest.FromString,
-                    response_serializer=posts__pb2.PostResponse.SerializeToString,
+                    request_deserializer=posts_dot_proto_dot_posts__pb2.UpdatePostRequest.FromString,
+                    response_serializer=posts_dot_proto_dot_posts__pb2.PostResponse.SerializeToString,
             ),
             'DeletePost': grpc.unary_unary_rpc_method_handler(
                     servicer.DeletePost,
-                    request_deserializer=posts__pb2.DeletePostRequest.FromString,
-                    response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+                    request_deserializer=posts_dot_proto_dot_posts__pb2.DeletePostRequest.FromString,
+                    response_serializer=posts_dot_proto_dot_posts__pb2.DeletePostResponse.SerializeToString,
             ),
             'ListPosts': grpc.unary_unary_rpc_method_handler(
                     servicer.ListPosts,
-                    request_deserializer=posts__pb2.ListPostsRequest.FromString,
-                    response_serializer=posts__pb2.ListPostsResponse.SerializeToString,
+                    request_deserializer=posts_dot_proto_dot_posts__pb2.ListPostsRequest.FromString,
+                    response_serializer=posts_dot_proto_dot_posts__pb2.ListPostsResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'posts.PostsService', rpc_method_handlers)
+            'post.PostService', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
-    server.add_registered_method_handlers('posts.PostsService', rpc_method_handlers)
+    server.add_registered_method_handlers('post.PostService', rpc_method_handlers)
 
 
  # This class is part of an EXPERIMENTAL API.
-class PostsService(object):
+class PostService(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
@@ -153,9 +147,9 @@ class PostsService(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/posts.PostsService/CreatePost',
-            posts__pb2.CreatePostRequest.SerializeToString,
-            posts__pb2.PostResponse.FromString,
+            '/post.PostService/CreatePost',
+            posts_dot_proto_dot_posts__pb2.CreatePostRequest.SerializeToString,
+            posts_dot_proto_dot_posts__pb2.PostResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -180,9 +174,9 @@ class PostsService(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/posts.PostsService/GetPost',
-            posts__pb2.GetPostRequest.SerializeToString,
-            posts__pb2.PostResponse.FromString,
+            '/post.PostService/GetPost',
+            posts_dot_proto_dot_posts__pb2.GetPostRequest.SerializeToString,
+            posts_dot_proto_dot_posts__pb2.PostResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -207,9 +201,9 @@ class PostsService(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/posts.PostsService/UpdatePost',
-            posts__pb2.UpdatePostRequest.SerializeToString,
-            posts__pb2.PostResponse.FromString,
+            '/post.PostService/UpdatePost',
+            posts_dot_proto_dot_posts__pb2.UpdatePostRequest.SerializeToString,
+            posts_dot_proto_dot_posts__pb2.PostResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -234,9 +228,9 @@ class PostsService(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/posts.PostsService/DeletePost',
-            posts__pb2.DeletePostRequest.SerializeToString,
-            google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+            '/post.PostService/DeletePost',
+            posts_dot_proto_dot_posts__pb2.DeletePostRequest.SerializeToString,
+            posts_dot_proto_dot_posts__pb2.DeletePostResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -261,9 +255,9 @@ class PostsService(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/posts.PostsService/ListPosts',
-            posts__pb2.ListPostsRequest.SerializeToString,
-            posts__pb2.ListPostsResponse.FromString,
+            '/post.PostService/ListPosts',
+            posts_dot_proto_dot_posts__pb2.ListPostsRequest.SerializeToString,
+            posts_dot_proto_dot_posts__pb2.ListPostsResponse.FromString,
             options,
             channel_credentials,
             insecure,

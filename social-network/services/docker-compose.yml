@@ -10,6 +10,8 @@ services:
       - posts-service
     networks:
       - app-network
+      - posts-network
+      - users-network
 
   users-service:
     build: ./users-service
@@ -19,30 +21,12 @@ services:
       - DATABASE_URL=postgresql://postgres:postgres@users_db:5432/users
     networks:
       - app-network
+      - users-network
   
-  posts_service:
-    build: .
-    environment:
-      - DATABASE_URL=postgresql://postgres:postgres@posts_db:5432/posts
-      - GRPC_PORT=50051
-    depends_on:
-      - posts_db
-    networks:
-      - app-network
-
-  posts_db:
-    image: postgres:14-alpine
-    environment:
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=posts
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-
   users_db:
     image: postgres:13
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - users_postgres_data:/var/lib/postgresql/data/
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -50,10 +34,46 @@ services:
     ports:
       - "5432:5432"
     networks:
+      - users-network
+  
+  posts_db:
+    image: postgres:latest
+    container_name: postservice_postgres
+    environment:
+      POSTGRES_USER: postservice
+      POSTGRES_PASSWORD: postservicepass
+      POSTGRES_DB: postservicedb
+    volumes:
+      - posts_postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    networks:
       - app-network
+      - posts-network
+
+  posts-service:
+    build: ./posts-service
+    depends_on:
+      - posts_db
+    environment:
+      - DATABASE_USER=postservice
+      - DATABASE_PASSWORD=postservicepass
+      - DATABASE_HOST=posts_db
+      - DATABASE_PORT=5432
+      - DATABASE_NAME=postservicedb
+      - GRPC_HOST=0.0.0.0
+      - GRPC_PORT=50051
+    ports:
+      - "50051:50051"
+    networks:
+      - app-network
+      - posts-network
 
 networks:
   app-network:
+  posts-network:
+  users-network:
 
 volumes:
-  postgres_data:
+  users_postgres_data:
+  posts_postgres_data:
